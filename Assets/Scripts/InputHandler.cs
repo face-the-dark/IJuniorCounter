@@ -3,24 +3,26 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
-    private bool _isLeftMouseButtonAgainPressed;
+    private const int Button = 0;
     
-    public event Action LeftMouseButtonPressed;
-    public event Action LeftMouseButtonAgainPressed;
+    private bool _isButtonAgainPressed;
+    
+    public event Action ButtonPressed;
+    public event Action ButtonAgainPressed;
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(Button))
         {
-            if (_isLeftMouseButtonAgainPressed)
+            if (_isButtonAgainPressed)
             {
-                LeftMouseButtonAgainPressed?.Invoke();
-                _isLeftMouseButtonAgainPressed = false;
+                ButtonAgainPressed?.Invoke();
+                _isButtonAgainPressed = false;
             }
             else
             {
-                LeftMouseButtonPressed?.Invoke();
-                _isLeftMouseButtonAgainPressed = true;
+                ButtonPressed?.Invoke();
+                _isButtonAgainPressed = true;
             }
         }
     }

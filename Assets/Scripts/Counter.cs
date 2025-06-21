@@ -4,21 +4,38 @@ using UnityEngine;
 
 public class Counter : MonoBehaviour
 {
+    [SerializeField] private InputHandler _inputHandler;
     [SerializeField] private int _increment = 1;
     [SerializeField] private float _delay = 0.5f;
     
     private int _value;
+    private Coroutine _coroutine;
 
     public event Action<int> ValueChanged;
 
-    public void StartIncrease()
+    private void OnEnable()
     {
-        StartCoroutine(nameof(Increase));
+        _inputHandler.ButtonPressed += StartIncrease;
+        _inputHandler.ButtonAgainPressed += StopIncrease;
     }
 
-    public void StopIncrease()
+    private void OnDisable()
     {
-        StopCoroutine(nameof(Increase));
+        _inputHandler.ButtonPressed -= StartIncrease;
+        _inputHandler.ButtonAgainPressed -= StopIncrease;
+    }
+
+    private void StartIncrease()
+    {
+        _coroutine = StartCoroutine(Increase());
+    }
+
+    private void StopIncrease()
+    {
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
     }
 
     private IEnumerator Increase()
